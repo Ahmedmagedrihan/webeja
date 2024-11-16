@@ -1,0 +1,121 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Guess the Word: Christa</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            text-align: center;
+            background-color: #f4f4f9;
+            padding: 50px;
+        }
+        h1 {
+            color: #4CAF50;
+        }
+        .word {
+            font-size: 30px;
+            letter-spacing: 3px;
+            margin: 20px;
+        }
+        .message {
+            font-size: 20px;
+            color: #FF6347;
+            margin-top: 20px;
+        }
+        .input-box {
+            font-size: 18px;
+            padding: 10px;
+            width: 50px;
+            text-align: center;
+            margin: 10px;
+        }
+        button {
+            padding: 10px 20px;
+            font-size: 16px;
+            background-color: #4CAF50;
+            color: white;
+            border: none;
+            cursor: pointer;
+        }
+        button:hover {
+            background-color: #45a049;
+        }
+        .attempts {
+            font-size: 18px;
+        }
+    </style>
+</head>
+<body>
+
+<h1>Guess the Word: Christa</h1>
+<p class="word" id="word"></p>
+<input type="text" id="letterInput" class="input-box" maxlength="1" />
+<button onclick="guessLetter()">Guess</button>
+<p class="attempts" id="attempts"></p>
+<p class="message" id="message"></p>
+
+<script>
+    const word = "Christa".toUpperCase();
+    let guessedWord = Array(word.length).fill("_");
+    let attemptsLeft = 6;
+    let guessedLetters = [];
+
+    // Display the current state of the word
+    function displayWord() {
+        document.getElementById("word").innerText = guessedWord.join(" ");
+    }
+
+    // Display attempts left
+    function displayAttempts() {
+        document.getElementById("attempts").innerText = `Attempts Left: ${attemptsLeft}`;
+    }
+
+    // Handle letter guesses
+    function guessLetter() {
+        const letter = document.getElementById("letterInput").value.toUpperCase();
+        if (guessedLetters.includes(letter) || letter === "") {
+            document.getElementById("message").innerText = "You've already guessed that letter!";
+            return;
+        }
+
+        guessedLetters.push(letter);
+
+        if (word.includes(letter)) {
+            // Reveal the letter in the word
+            for (let i = 0; i < word.length; i++) {
+                if (word[i] === letter) {
+                    guessedWord[i] = letter;
+                }
+            }
+            document.getElementById("message").innerText = `Good job! You guessed "${letter}" correctly!`;
+        } else {
+            attemptsLeft--;
+            document.getElementById("message").innerText = `Oops! "${letter}" is not in the word.`;
+        }
+
+        displayWord();
+        displayAttempts();
+        checkGameStatus();
+
+        // Clear the input
+        document.getElementById("letterInput").value = "";
+    }
+
+    // Check if the game is over or won
+    function checkGameStatus() {
+        if (guessedWord.join("") === word) {
+            document.getElementById("message").innerText = "Congratulations! You guessed the word!";
+        } else if (attemptsLeft <= 0) {
+            document.getElementById("message").innerText = `Game Over! The word was "${word}".`;
+        }
+    }
+
+    // Initialize the game
+    displayWord();
+    displayAttempts();
+</script>
+
+</body>
+</html>
